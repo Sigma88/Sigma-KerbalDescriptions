@@ -62,6 +62,8 @@ namespace SigmaKerbalDescriptions
 
         void UpdateTooltip(ProtoCrewMember kerbal)
         {
+            bool nameChanged = false;
+
             TooltipController_CrewAC tooltip = Resources.FindObjectsOfTypeAll<TooltipController_CrewAC>().FirstOrDefault(t => t?.titleString?.Contains(kerbal.name) == true);
 
             // Missing Kerbal Tooltip
@@ -75,8 +77,11 @@ namespace SigmaKerbalDescriptions
                 if (info?.informations?.Any(s => !string.IsNullOrEmpty(s)) == true)
                     tooltip.descriptionString = info?.informations?.FirstOrDefault(s => !string.IsNullOrEmpty(s)).Replace("&br;", "\n");
 
-                if (!string.IsNullOrEmpty(info?.displayName))
+                if (!nameChanged && !string.IsNullOrEmpty(info?.displayName))
+                {
                     tooltip.titleString = info.displayName.Replace("&name;", kerbal.name);
+                    nameChanged = true;
+                }
             }
 
             // Random Kerbal Tooltip
@@ -112,8 +117,11 @@ namespace SigmaKerbalDescriptions
                                     Information.indexChance = null;
                                 }
 
-                                if (!string.IsNullOrEmpty(Information.newName))
+                                if (!nameChanged && !string.IsNullOrEmpty(Information.newName))
+                                {
                                     tooltip.titleString = Information.newName.Replace("&name;", kerbal.name);
+                                    nameChanged = true;
+                                }
                             }
                         }
                     }
