@@ -22,10 +22,6 @@ namespace SigmaKerbalDescriptions
                 for (int j = 0; j < requirements.Length; j++)
                 {
                     Information.DataBase.Add(new Information(requirements[j], text));
-                    Debug.Log("SigmaLog: added Information = " + Information.DataBase.LastOrDefault());
-                    Debug.Log("SigmaLog: added count = " + Information.DataBase?.Count);
-                    Debug.Log("SigmaLog: displayName = " + Information.DataBase.LastOrDefault()?.displayName);
-                    Debug.Log("SigmaLog: informations = " + Information.DataBase.LastOrDefault()?.informations?.Length);
                 }
             }
 
