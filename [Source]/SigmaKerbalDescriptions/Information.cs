@@ -79,9 +79,7 @@ namespace SigmaKerbalDescriptions
             minStupidity = Parse(requirements.GetValue("minStupidity"), minStupidity);
             maxStupidity = Parse(requirements.GetValue("maxStupidity"), maxStupidity);
 
-            Debug.Log("SigmaLog: about to parse displayName");
             displayName = text.GetValue("displayName");
-            Debug.Log("SigmaLog: displayName = " + displayName);
             informations = text.GetValues("info")?.Where(s => !string.IsNullOrEmpty(s))?.ToArray();
         }
 
@@ -105,7 +103,6 @@ namespace SigmaKerbalDescriptions
             WithName = DataBase.Where(i => i.name != null).ToList();
             NoName = DataBase.Where(i => i.name == null && i.index != null).OrderBy(i => i.index).ThenBy(i => i.useChance).ToList();
             NoName.AddRange(DataBase.Where(i => i.name == null && i.index == null).OrderBy(i => i.index).ThenBy(i => i.useChance));
-            Debug.Log("SigmaLog: " + DataBase.Count + " = " + WithName.Count + " + " + NoName.Count);
         }
     }
 }
