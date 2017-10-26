@@ -10,7 +10,8 @@ namespace SigmaKerbalDescriptions
     {
         public static string hash = "";
         public static int? indexChance = null;
-        public static string newName = null;
+        public static string newItemName = null;
+        public static string newTooltipName = null;
         public static List<Information> DataBase = new List<Information>();
         public static List<Information> WithName = new List<Information>();
         public static List<Information> NoName = new List<Information>();
@@ -31,6 +32,7 @@ namespace SigmaKerbalDescriptions
         public float maxStupidity = 1;
 
         public string displayName = null;
+        public string tooltipName = null;
         public string[] informations = new string[] { };
 
 
@@ -50,7 +52,8 @@ namespace SigmaKerbalDescriptions
                                 {
                                     if (minStupidity <= kerbal.stupidity && maxStupidity >= kerbal.stupidity)
                                     {
-                                        Information.newName = displayName;
+                                        newItemName = displayName;
+                                        newTooltipName = tooltipName;
                                         return informations;
                                     }
                                 }
@@ -59,6 +62,7 @@ namespace SigmaKerbalDescriptions
                     }
                 }
             }
+
             return new string[] { };
         }
 
@@ -80,6 +84,7 @@ namespace SigmaKerbalDescriptions
             maxStupidity = Parse(requirements.GetValue("maxStupidity"), maxStupidity);
 
             displayName = text.GetValue("displayName");
+            tooltipName = text.GetValue("tooltipName");
             informations = text.GetValues("info")?.Where(s => !string.IsNullOrEmpty(s))?.ToArray();
         }
 
