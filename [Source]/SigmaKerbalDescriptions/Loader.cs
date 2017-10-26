@@ -9,8 +9,7 @@ namespace SigmaKerbalDescriptions
     {
         void Start()
         {
-            ConfigNode[] SKD = GameDatabase.Instance.GetConfigNodes("SigmaKerbalDescriptions");
-            ConfigNode[] nodes = SKD?.FirstOrDefault(n => n.HasNode("Information")).GetNodes("Information");
+            ConfigNode[] nodes = GameDatabase.Instance?.GetConfigNodes("SigmaKerbalDescriptions")?.FirstOrDefault(n => n.HasNode("Information"))?.GetNodes("Information");
 
             for (int i = 0; i < nodes?.Length; i++)
             {
@@ -30,7 +29,8 @@ namespace SigmaKerbalDescriptions
                 }
             }
 
-            Information.OrderDB();
+            if (Information.DataBase?.Count > 0)
+                Information.OrderDB();
         }
     }
 }
