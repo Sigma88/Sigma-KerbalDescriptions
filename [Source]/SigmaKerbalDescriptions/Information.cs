@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using Gender = ProtoCrewMember.Gender;
 
 
@@ -8,17 +9,21 @@ namespace SigmaKerbalDescriptions
 {
     public class Information
     {
+        // Static
         public static string hash = "";
         public static int? indexChance = null;
         public static string newItemName = null;
+        public static Texture newSprite = null;
         public static string newTooltipName = null;
         public static List<Information> DataBase = new List<Information>();
         public static List<Information> WithName = new List<Information>();
         public static List<Information> NoName = new List<Information>();
 
+        // Identifiers
         public string name = null;
         public int? index = null;
 
+        // Requirements
         public float useChance = 1;
         public Gender? gender = null;
         public string[] trait = null;
@@ -31,11 +36,14 @@ namespace SigmaKerbalDescriptions
         public float minStupidity = 0;
         public float maxStupidity = 1;
 
+        // Define
         public string displayName = null;
+        public Texture sprite = null;
         public string tooltipName = null;
         public string[] informations = new string[] { };
 
 
+        // Get
         public string[] GetNext(ProtoCrewMember kerbal)
         {
             if (gender == null || gender == kerbal.gender)
@@ -54,6 +62,7 @@ namespace SigmaKerbalDescriptions
                                     {
                                         newItemName = displayName;
                                         newTooltipName = tooltipName;
+                                        newSprite = sprite;
                                         return informations;
                                     }
                                 }
@@ -84,6 +93,7 @@ namespace SigmaKerbalDescriptions
             maxStupidity = Parse(requirements.GetValue("maxStupidity"), maxStupidity);
 
             displayName = text.GetValue("displayName");
+            sprite = Parse(text.GetValue("sprite"), sprite);
             tooltipName = text.GetValue("tooltipName");
             informations = text.GetValues("info")?.Where(s => !string.IsNullOrEmpty(s))?.ToArray();
         }
@@ -100,6 +110,10 @@ namespace SigmaKerbalDescriptions
         {
             try { return (Gender)Enum.Parse(typeof(Gender), s); }
             catch { return defaultValue; }
+        }
+        Texture Parse(string s, Texture defaultValue)
+        {
+            return Resources.FindObjectsOfTypeAll<Texture>().FirstOrDefault(t => t.name == s);
         }
 
         public static void OrderDB()
