@@ -13,7 +13,6 @@ namespace SigmaKerbalDescriptions
         public static string hash = "";
         public static int? indexChance = null;
         public static string newItemName = null;
-        public static Texture newSprite = null;
         public static string newTooltipName = null;
         public static List<Information> DataBase = new List<Information>();
         public static List<Information> WithName = new List<Information>();
@@ -24,6 +23,7 @@ namespace SigmaKerbalDescriptions
         public int? index = null;
 
         // Requirements
+        public bool useGameSeed = false;
         public float useChance = 1;
         public Gender? gender = null;
         public string[] trait = null;
@@ -38,7 +38,6 @@ namespace SigmaKerbalDescriptions
 
         // Define
         public string displayName = null;
-        public Texture sprite = null;
         public string tooltipName = null;
         public string[] informations = new string[] { };
 
@@ -62,7 +61,7 @@ namespace SigmaKerbalDescriptions
                                     {
                                         newItemName = displayName;
                                         newTooltipName = tooltipName;
-                                        newSprite = sprite;
+
                                         return informations;
                                     }
                                 }
@@ -78,6 +77,7 @@ namespace SigmaKerbalDescriptions
 
         public Information(ConfigNode requirements, ConfigNode text)
         {
+            useGameSeed = Parse(requirements.GetValue("useGameSeed"), useGameSeed);
             useChance = Parse(requirements.GetValue("useChance"), useChance);
             index = Parse(requirements.GetValue("index"), index);
             name = requirements.GetValue("name");
@@ -93,7 +93,6 @@ namespace SigmaKerbalDescriptions
             maxStupidity = Parse(requirements.GetValue("maxStupidity"), maxStupidity);
 
             displayName = text.GetValue("displayName");
-            sprite = Parse(text.GetValue("sprite"), sprite);
             tooltipName = text.GetValue("tooltipName");
             informations = text.GetValues("info")?.Where(s => !string.IsNullOrEmpty(s))?.ToArray();
         }
