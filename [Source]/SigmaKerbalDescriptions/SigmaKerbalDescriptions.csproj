@@ -38,7 +38,8 @@
     <Compile Include="DebugLogger.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Information.cs" />
-    <Compile Include="TooltipFixer.cs" />
+    <Compile Include="AstronautComplexTriggers.cs" />
+    <Compile Include="DescriptionsFixer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">

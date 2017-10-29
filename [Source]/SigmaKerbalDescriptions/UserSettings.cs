@@ -7,11 +7,19 @@ using UnityEngine;
 namespace SigmaKerbalDescriptions
 {
     [KSPAddon(KSPAddon.Startup.Instantly, true)]
-    class ConfigNodeRemover : MonoBehaviour
+    internal class UserSettings : MonoBehaviour
     {
+        internal static ConfigNode ConfigNode
+        {
+            get
+            {
+                return GameDatabase.Instance?.GetConfigs(nodeName)?.FirstOrDefault(n => n.url == (folder.Substring(9) + file + "/" + nodeName))?.config;
+            }
+        }
+
         static string folder = "GameData/Sigma/KerbalDescriptions/";
         static string file = "Settings";
-        static string node = "SigmaKerbalDescriptions";
+        internal static string nodeName = "SigmaKerbalDescriptions";
 
         void Awake()
         {
@@ -31,25 +39,26 @@ namespace SigmaKerbalDescriptions
             {
                 UnityEngine.Debug.Log(Debug.Tag + " WARNING: Missing file => " + folder + file + ".cfg");
 
-                File.WriteAllLines(folder + file + ".cfg", new[] { node + " {}" });
+                File.WriteAllLines(folder + file + ".cfg", new[] { nodeName + " {}" });
                 return;
             }
 
-            if (ConfigNode.Load(folder + file + ".cfg")?.HasNode(node) != true)
+            if (ConfigNode.Load(folder + file + ".cfg")?.HasNode(nodeName) != true)
             {
-                UnityEngine.Debug.Log(Debug.Tag + " WARNING: Missing node => " + folder + file + "/" + node);
+                UnityEngine.Debug.Log(Debug.Tag + " WARNING: Missing node => " + folder + file + "/" + nodeName);
 
-                File.AppendAllText(folder + file + ".cfg", "\r\n" + node + " {}");
+                File.AppendAllText(folder + file + ".cfg", "\r\n" + nodeName + " {}");
             }
         }
 
         void Start()
         {
-            var configs = GameDatabase.Instance.GetConfigs(node).Where(c => c.url != (folder.Substring(9) + file + "/" + node)).ToArray();
+            var configs = GameDatabase.Instance.GetConfigs(nodeName);
 
             for (int i = 0; i < configs?.Length; i++)
             {
-                configs[i].parent.configs.Remove(configs[i]);
+                if (configs[i].url != (folder.Substring(9) + file + "/" + nodeName))
+                    configs[i].parent.configs.Remove(configs[i]);
             }
         }
     }

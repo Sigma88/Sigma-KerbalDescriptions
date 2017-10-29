@@ -1,4 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using UnityEngine;
+using KSP.UI;
+using KSP.UI.Screens;
+using KSP.UI.TooltipTypes;
 
 
 namespace SigmaKerbalDescriptions
@@ -18,6 +25,32 @@ namespace SigmaKerbalDescriptions
             Information.hash = h.ToString();
 
             return h;
+        }
+
+        internal static CrewListItem crewListItem(this ProtoCrewMember kerbal)
+        {
+            FieldInfo crew = typeof(CrewListItem).GetFields(BindingFlags.NonPublic | BindingFlags.Instance).FirstOrDefault(k => k.FieldType == typeof(ProtoCrewMember));
+            Debug.Log("Kerbal.crewListItem", "Kerbal reflection = " + crew);
+            AstronautComplex ac = Resources.FindObjectsOfTypeAll<AstronautComplex>().FirstOrDefault();
+            Debug.Log("Kerbal.crewListItem", "AstronautComplex = " + ac);
+            if (crew == null || ac == null) return null;
+
+            UIList[] list = new[] { ac?.ScrollListApplicants, ac?.ScrollListAssigned, ac?.ScrollListAvailable, ac?.ScrollListKia };
+            CrewListItem item = null;
+
+            for (int i = 0; i < list?.Length; i++)
+            {
+                item = list[i]?.GetUiListItems()?.FirstOrDefault(k => crew.GetValue(k.GetComponent<CrewListItem>()) == kerbal)?.GetComponent<CrewListItem>();
+                if (item != null) break;
+            }
+
+            Debug.Log("Kerbal.crewListItem", "Item = " + item);
+            return item;
+        }
+
+        internal static TooltipController_CrewAC GetTooltip(this CrewListItem listItem)
+        {
+            return listItem?.GetComponent<TooltipController_CrewAC>();
         }
     }
 }

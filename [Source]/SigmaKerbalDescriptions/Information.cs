@@ -3,66 +3,93 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Gender = ProtoCrewMember.Gender;
+using Type = ProtoCrewMember.KerbalType;
 
 
 namespace SigmaKerbalDescriptions
 {
-    public class Information
+    internal class Information
     {
         // Static
-        public static string hash = "";
-        public static int? indexChance = null;
-        public static string newItemName = null;
-        public static string newTooltipName = null;
-        public static List<Information> DataBase = new List<Information>();
-        public static List<Information> WithName = new List<Information>();
-        public static List<Information> NoName = new List<Information>();
+        internal static string hash = "";
+        internal static string newItemName = null;
+        internal static string newTooltipName = null;
+        internal static Texture newSprite = null;
+        internal static List<Information> List = new List<Information>();
+        internal static List<Information> DataBase = new List<Information>();
 
         // Identifiers
-        public string name = null;
-        public int? index = null;
+        string name = null;
+        internal int? index = null;
 
         // Requirements
-        public bool useGameSeed = false;
-        public float useChance = 1;
-        public Gender? gender = null;
-        public string[] trait = null;
-        public bool? veteran = null;
-        public bool? isBadass = null;
-        public int minLevel = 0;
-        public int maxLevel = 5;
-        public float minCourage = 0;
-        public float maxCourage = 1;
-        public float minStupidity = 0;
-        public float maxStupidity = 1;
+        internal bool useGameSeed = false;
+        internal float useChance = 1;
+        Type? rosterStatus = null;
+        Gender? gender = null;
+        string[] trait = null;
+        bool? veteran = null;
+        bool? isBadass = null;
+        int minLevel = 0;
+        int maxLevel = 5;
+        float minCourage = 0;
+        float maxCourage = 1;
+        float minStupidity = 0;
+        float maxStupidity = 1;
 
         // Define
-        public string displayName = null;
-        public string tooltipName = null;
-        public string[] informations = new string[] { };
+        string displayName = null;
+        string tooltipName = null;
+        Texture sprite = null;
+        string[] informations = new string[] { };
 
 
         // Get
-        public string[] GetNext(ProtoCrewMember kerbal)
+        internal string[] GetText(ProtoCrewMember kerbal)
         {
-            if (gender == null || gender == kerbal.gender)
-            {
-                if (trait == null || trait.Contains(kerbal.trait))
-                {
-                    if (veteran == null || veteran == kerbal.veteran)
-                    {
-                        if (isBadass == null || isBadass == kerbal.isBadass)
-                        {
-                            if (minLevel <= kerbal.experienceLevel && maxLevel >= kerbal.experienceLevel)
-                            {
-                                if (minCourage <= kerbal.courage && maxCourage >= kerbal.courage)
-                                {
-                                    if (minStupidity <= kerbal.stupidity && maxStupidity >= kerbal.stupidity)
-                                    {
-                                        newItemName = displayName;
-                                        newTooltipName = tooltipName;
+            newTooltipName = null;
+            newItemName = null;
+            newSprite = null;
 
-                                        return informations;
+            if (name == null || name == kerbal.name)
+            {
+                Debug.Log("Information.GetText", "Matched name = " + name + " to kerbal name = " + kerbal.name);
+                if (rosterStatus == null || rosterStatus == kerbal.type)
+                {
+                    Debug.Log("Information.GetText", "Matched rosterStatus = " + rosterStatus + " to kerbal rosterStatus = " + kerbal.type);
+                    if (gender == null || gender == kerbal.gender)
+                    {
+                        Debug.Log("Information.GetText", "Matched gender = " + gender + " to kerbal gender = " + kerbal.gender);
+                        if (trait == null || trait.Contains(kerbal.trait))
+                        {
+                            Debug.Log("Information.GetText", "Matched trait = " + trait + " to kerbal trait = " + kerbal.trait);
+                            if (veteran == null || veteran == kerbal.veteran)
+                            {
+                                Debug.Log("Information.GetText", "Matched veteran = " + veteran + " to kerbal veteran = " + kerbal.veteran);
+                                if (isBadass == null || isBadass == kerbal.isBadass)
+                                {
+                                    Debug.Log("Information.GetText", "Matched isBadass = " + isBadass + " to kerbal isBadass = " + kerbal.isBadass);
+                                    if (minLevel <= kerbal.experienceLevel && maxLevel >= kerbal.experienceLevel)
+                                    {
+                                        Debug.Log("Information.GetText", "Matched minLevel = " + minLevel + ", maxLevel = " + maxLevel + " to kerbal level = " + kerbal.experienceLevel);
+                                        if (minCourage <= kerbal.courage && maxCourage >= kerbal.courage)
+                                        {
+                                            Debug.Log("Information.GetText", "Matched minCourage = " + minCourage + ", maxCourage = " + maxCourage + " to kerbal courage = " + kerbal.courage);
+                                            if (minStupidity <= kerbal.stupidity && maxStupidity >= kerbal.stupidity)
+                                            {
+                                                Debug.Log("Information.GetText", "Matched minStupidity = " + minStupidity + ", maxStupidity = " + maxStupidity + " to kerbal stupidity = " + kerbal.stupidity);
+
+                                                newItemName = displayName;
+                                                Debug.Log("Information.GetText", "newItemName = " + newItemName);
+                                                newTooltipName = tooltipName;
+                                                Debug.Log("Information.GetText", "newTooltipName = " + newTooltipName);
+                                                newSprite = sprite;
+                                                Debug.Log("Information.GetText", "newSprite = " + newSprite);
+
+                                                Debug.Log("Information.GetText", "informations count = " + informations.Length);
+                                                return informations;
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -75,12 +102,13 @@ namespace SigmaKerbalDescriptions
         }
 
 
-        public Information(ConfigNode requirements, ConfigNode text)
+        internal Information(ConfigNode requirements, ConfigNode text)
         {
             useGameSeed = Parse(requirements.GetValue("useGameSeed"), useGameSeed);
             useChance = Parse(requirements.GetValue("useChance"), useChance);
             index = Parse(requirements.GetValue("index"), index);
             name = requirements.GetValue("name");
+            rosterStatus = Parse(requirements.GetValue("rosterStatus"), rosterStatus);
             gender = Parse(requirements.GetValue("gender"), gender);
             trait = requirements.HasValue("trait") ? requirements.GetValues("trait") : null;
             veteran = Parse(requirements.GetValue("veteran"), veteran);
@@ -94,6 +122,7 @@ namespace SigmaKerbalDescriptions
 
             displayName = text.GetValue("displayName");
             tooltipName = text.GetValue("tooltipName");
+            sprite = Parse(text.GetValue("sprite"), sprite);
             informations = text.GetValues("info")?.Where(s => !string.IsNullOrEmpty(s))?.ToArray();
         }
 
@@ -105,22 +134,37 @@ namespace SigmaKerbalDescriptions
         int Parse(string s, int defaultValue) { return int.TryParse(s, out int b) ? b : defaultValue; }
         int? Parse(string s, int? defaultValue) { return int.TryParse(s, out int b) ? b : defaultValue; }
 
+        Type? Parse(string s, Type? defaultValue)
+        {
+            try { return (Type)Enum.Parse(typeof(Type), s); }
+            catch { return defaultValue; }
+        }
+
         Gender? Parse(string s, Gender? defaultValue)
         {
             try { return (Gender)Enum.Parse(typeof(Gender), s); }
             catch { return defaultValue; }
         }
+
         Texture Parse(string s, Texture defaultValue)
         {
-            return Resources.FindObjectsOfTypeAll<Texture>().FirstOrDefault(t => t.name == s);
+            return Resources.FindObjectsOfTypeAll<Texture>().FirstOrDefault(t => t.name == s) ?? defaultValue;
         }
 
-        public static void OrderDB()
+        internal static void OrderDB()
         {
-            DataBase = DataBase.Where(i => i.informations.Length > 0 || !string.IsNullOrEmpty(i.displayName)).ToList();
-            WithName = DataBase.Where(i => i.name != null).ToList();
-            NoName = DataBase.Where(i => i.name == null && i.index != null).OrderBy(i => i.index).ThenBy(i => i.useChance).ToList();
-            NoName.AddRange(DataBase.Where(i => i.name == null && i.index == null).OrderBy(i => i.index).ThenBy(i => i.useChance));
+            Debug.Log("Information.OrderDB", "Total Information Nodes Loaded = " + List.Count);
+            List = List.Where(i => i.informations.Length > 0 || !string.IsNullOrEmpty(i.tooltipName) || !string.IsNullOrEmpty(i.displayName) || i.sprite != null).ToList();
+            Debug.Log("Information.OrderDB", "Valid Information Nodes Loaded = " + List.Count);
+            Debug.Log("Information.OrderDB", "Initial DataBase count = " + DataBase.Count);
+            DataBase.AddRange(List.Where(i => i.name != null && i.index != null).OrderBy(i => i.index).ThenBy(i => i.useChance));
+            Debug.Log("Information.OrderDB", "Added withName, withIndex to DataBase count = " + DataBase.Count);
+            DataBase.AddRange(List.Where(i => i.name != null && i.index == null).OrderBy(i => i.index).ThenBy(i => i.useChance));
+            Debug.Log("Information.OrderDB", "Added withName, noIndex to DataBase count = " + DataBase.Count);
+            DataBase.AddRange(List.Where(i => i.name == null && i.index != null).OrderBy(i => i.index).ThenBy(i => i.useChance));
+            Debug.Log("Information.OrderDB", "Added noName, withIndex to DataBase count = " + DataBase.Count);
+            DataBase.AddRange(List.Where(i => i.name == null && i.index == null).OrderBy(i => i.index).ThenBy(i => i.useChance));
+            Debug.Log("Information.OrderDB", "Added noName, noIndex to DataBase count = " + DataBase.Count);
         }
     }
 }
