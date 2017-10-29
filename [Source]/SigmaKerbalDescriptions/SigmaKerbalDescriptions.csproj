@@ -31,14 +31,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="NodeRemover.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Version.cs" />
+    <Compile Include="UserSettings.cs" />
+    <Compile Include="SettingsLoader.cs" />
     <Compile Include="DebugLogger.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Information.cs" />
     <Compile Include="TooltipFixer.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="Loader.cs" />
-    <Compile Include="Version.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
