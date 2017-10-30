@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -24,6 +24,8 @@ namespace SigmaKerbalDescriptions
 
         // Requirements
         internal bool useGameSeed = false;
+        internal bool unique = false;
+        internal bool last = false;
         internal float useChance = 1;
         Type? rosterStatus = null;
         Gender? gender = null;
@@ -105,6 +107,8 @@ namespace SigmaKerbalDescriptions
         internal Information(ConfigNode requirements, ConfigNode text)
         {
             useGameSeed = Parse(requirements.GetValue("useGameSeed"), useGameSeed);
+            unique = Parse(requirements.GetValue("unique"), unique);
+            last = Parse(requirements.GetValue("last"), last);
             useChance = Parse(requirements.GetValue("useChance"), useChance);
             index = Parse(requirements.GetValue("index"), index);
             name = requirements.GetValue("name");
