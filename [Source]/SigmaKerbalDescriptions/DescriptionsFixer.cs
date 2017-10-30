@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using UnityEngine;
 using KSP.UI;
 using KSP.UI.TooltipTypes;
@@ -80,6 +80,7 @@ namespace SigmaKerbalDescriptions
 
                 int index = 0;
                 int? indexChance = null;
+                bool keepAddingText = true;
                 bool tooltipNameChanged = false;
                 bool itemNameChanged = false;
                 bool spriteChanged = false;
@@ -92,13 +93,19 @@ namespace SigmaKerbalDescriptions
                     {
                         string[] text = info.GetText(kerbal);
 
-                        if (text.Any())
+                        if (text.Any() && keepAddingText)
                         {
                             if (info.useChance != 1 && indexChance == null)
                                 indexChance = kerbal.Hash(info.useGameSeed) % 100;
 
                             if (info.useChance == 1 || indexChance < info.useChance * 100)
                             {
+                                if (info.unique)
+                                    desctiprion = "";
+                                
+                                if (info.unique || info.last)
+                                    keepAddingText = false;
+                                
                                 if (text.Length == 1)
                                     description += text[0];
                                 else
