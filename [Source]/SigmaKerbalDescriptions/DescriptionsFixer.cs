@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using UnityEngine;
 using KSP.UI;
 using KSP.UI.TooltipTypes;
@@ -80,6 +80,7 @@ namespace SigmaKerbalDescriptions
 
                 int index = 0;
                 int? indexChance = null;
+                bool keepAddingText = true;
                 bool tooltipNameChanged = false;
                 bool itemNameChanged = false;
                 bool spriteChanged = false;
@@ -92,13 +93,19 @@ namespace SigmaKerbalDescriptions
                     {
                         string[] text = info.GetText(kerbal);
 
-                        if (text.Any())
+                        if (text.Any() && keepAddingText)
                         {
                             if (info.useChance != 1 && indexChance == null)
                                 indexChance = kerbal.Hash(info.useGameSeed) % 100;
 
                             if (info.useChance == 1 || indexChance < info.useChance * 100)
                             {
+                                if (info.unique)
+                                    description = "";
+
+                                if (info.unique || info.last)
+                                    keepAddingText = false;
+
                                 if (text.Length == 1)
                                     description += text[0];
                                 else
@@ -111,13 +118,13 @@ namespace SigmaKerbalDescriptions
 
                         if (tooltip != null && !tooltipNameChanged && !string.IsNullOrEmpty(Information.newTooltipName))
                         {
-                            tooltip.titleString = Information.newTooltipName.Replace("&name;", kerbal.name);
+                            tooltip.titleString = Information.newTooltipName.PrintFor(kerbal);
                             tooltipNameChanged = true;
                         }
 
                         if (item != null && !itemNameChanged && !string.IsNullOrEmpty(Information.newItemName))
                         {
-                            item.kerbalName.text = Information.newItemName.Replace("&name;", kerbal.name);
+                            item.kerbalName.text = Information.newItemName.PrintFor(kerbal);
                             itemNameChanged = true;
                         }
 
@@ -131,7 +138,7 @@ namespace SigmaKerbalDescriptions
 
                 if (tooltip != null && !string.IsNullOrEmpty(description))
                 {
-                    tooltip.descriptionString = description.Replace("&br;", "\n");
+                    tooltip.descriptionString = description.PrintFor(kerbal);
 
                     UIMasterController.Instance.DespawnTooltip(tooltip);
                 }

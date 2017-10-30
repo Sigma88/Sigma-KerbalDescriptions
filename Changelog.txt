@@ -1,3 +1,15 @@
+**v0.1.1**
+
+- Added new Requirements:
+   > last
+   > unique
+
+- Added new Entities:
+   > &trait;
+   > &missions;
+   > &visited;
+
+
 **v0.1.0**
 
 - First Beta Release
