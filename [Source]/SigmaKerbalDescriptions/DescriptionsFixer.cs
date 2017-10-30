@@ -138,7 +138,7 @@ namespace SigmaKerbalDescriptions
 
                 if (tooltip != null && !string.IsNullOrEmpty(description))
                 {
-                    tooltip.descriptionString = description.Replace("&br;", "\n");
+                    tooltip.descriptionString = description.PrintFor(kerbal);
 
                     UIMasterController.Instance.DespawnTooltip(tooltip);
                 }
