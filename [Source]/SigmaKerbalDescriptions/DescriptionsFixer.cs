@@ -101,11 +101,11 @@ namespace SigmaKerbalDescriptions
                             if (info.useChance == 1 || indexChance < info.useChance * 100)
                             {
                                 if (info.unique)
-                                    desctiprion = "";
-                                
+                                    description = "";
+
                                 if (info.unique || info.last)
                                     keepAddingText = false;
-                                
+
                                 if (text.Length == 1)
                                     description += text[0];
                                 else
@@ -118,13 +118,13 @@ namespace SigmaKerbalDescriptions
 
                         if (tooltip != null && !tooltipNameChanged && !string.IsNullOrEmpty(Information.newTooltipName))
                         {
-                            tooltip.titleString = Information.newTooltipName.Replace("&name;", kerbal.name);
+                            tooltip.titleString = Information.newTooltipName.PrintFor(kerbal);
                             tooltipNameChanged = true;
                         }
 
                         if (item != null && !itemNameChanged && !string.IsNullOrEmpty(Information.newItemName))
                         {
-                            item.kerbalName.text = Information.newItemName.Replace("&name;", kerbal.name);
+                            item.kerbalName.text = Information.newItemName.PrintFor(kerbal);
                             itemNameChanged = true;
                         }
 
