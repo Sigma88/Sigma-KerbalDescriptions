@@ -35,25 +35,24 @@ namespace SigmaKerbalDescriptions
 
     internal static class Description
     {
-        internal static void UpdateAll(KerbalRoster kerbals, bool fixTooltip = true, bool fixListItem = true)
+        internal static void UpdateAll(KerbalRoster kerbals)
         {
             for (int i = 0; i < kerbals?.Count; i++)
             {
-                Update(kerbals[i], fixTooltip, fixListItem);
+                Update(kerbals[i]);
             }
         }
 
-        internal static void UpdateAll(ProtoCrewMember[] kerbals, bool fixTooltip = true, bool fixListItem = true)
+        internal static void UpdateAll(ProtoCrewMember[] kerbals)
         {
             for (int i = 0; i < kerbals?.Length; i++)
             {
-                Update(kerbals[i], fixTooltip, fixListItem);
+                Update(kerbals[i]);
             }
         }
 
-        internal static void Update(ProtoCrewMember kerbal, bool fixTooltip = true, bool fixListItem = true)
+        internal static void Update(ProtoCrewMember kerbal)
         {
-            if (!fixTooltip && !fixListItem) return;
             Debug.Log("Description.Update", "kerbal = " + kerbal);
             if (kerbal == null) return;
 
@@ -61,9 +60,6 @@ namespace SigmaKerbalDescriptions
             Debug.Log("Description.Update", "item = " + item);
             TooltipController_CrewAC tooltip = item.GetTooltip();
             Debug.Log("Description.Update", "tooltip = " + tooltip);
-
-            if (!fixListItem) item = null;
-            if (!fixTooltip) tooltip = null;
 
             // Missing Kerbal Tooltip
             if (tooltip == null && item == null)
