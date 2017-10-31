@@ -59,6 +59,7 @@ namespace SigmaKerbalDescriptions
                 .Replace("&br;", "\n")
                 .Replace("&name;", kerbal.name)
                 .Replace("&trait;", kerbal.trait)
+                .Replace("&seed;", HighLogic.CurrentGame.Seed)
                 .Replace("&visited;", "" + (kerbal?.careerLog?.Entries?.Select(e => e.target)?.Distinct()?.Count() ?? 0))
                 .Replace("&missions;", "" + (kerbal?.careerLog?.Entries?.Select(e => e.flight)?.Distinct()?.Count() ?? 0));
         }
