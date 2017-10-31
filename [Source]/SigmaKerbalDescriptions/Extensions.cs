@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
@@ -59,29 +58,29 @@ namespace SigmaKerbalDescriptions
                 .Replace("&br;", "\n")
                 .Replace("&name;", kerbal.name)
                 .Replace("&trait;", kerbal.trait)
-                .Replace("&seed;", HighLogic.CurrentGame.Seed)
+                .Replace("&seed;", "" + HighLogic.CurrentGame.Seed)
                 .Replace("&visited;", "" + (kerbal?.careerLog?.Entries?.Select(e => e.target)?.Distinct()?.Count() ?? 0))
                 .Replace("&missions;", "" + (kerbal?.careerLog?.Entries?.Select(e => e.flight)?.Distinct()?.Count() ?? 0))
                 .GetHashColor();
         }
-        
+
         internal static string GetHashColor(this string s)
         {
             int start = 0;
 
-            while(s.Substring(start).Contains("&Color"))
+            while (s.Substring(start).Contains("&Color"))
             {
                 start = s.IndexOf("&Color");
-                end = s.Substring(start).IndexOf(";") + 1;
+                int end = s.Substring(start).IndexOf(";") + 1;
                 if (end > 9)
                 {
-                    int add = 0
-                    switch(s.Substring(start + 7, 2))
+                    int add = 0;
+                    switch (s.Substring(start + 6, 2))
                     {
                         case "Lo":
                             break;
                         case "Hi":
-                            add = 128;
+                            add = 80;
                             break;
                         default:
                             start++;
@@ -89,10 +88,10 @@ namespace SigmaKerbalDescriptions
                     }
                     string text = s.Substring(start, end);
                     int hash = Math.Abs(text.GetHashCode());
-                    string color = "#"
+                    string color = "#";
                     for (int i = 0; i < 3; i++)
                     {
-                        color += (hash % 128 + add).ToString("X");
+                        color += (hash % 176 + add).ToString("X");
                         hash = Math.Abs(hash.ToString().GetHashCode());
                     }
                     s = s.Replace(text, "<color=" + color + ">");
