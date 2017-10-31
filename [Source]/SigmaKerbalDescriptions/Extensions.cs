@@ -61,7 +61,48 @@ namespace SigmaKerbalDescriptions
                 .Replace("&trait;", kerbal.trait)
                 .Replace("&seed;", HighLogic.CurrentGame.Seed)
                 .Replace("&visited;", "" + (kerbal?.careerLog?.Entries?.Select(e => e.target)?.Distinct()?.Count() ?? 0))
-                .Replace("&missions;", "" + (kerbal?.careerLog?.Entries?.Select(e => e.flight)?.Distinct()?.Count() ?? 0));
+                .Replace("&missions;", "" + (kerbal?.careerLog?.Entries?.Select(e => e.flight)?.Distinct()?.Count() ?? 0))
+                .GetHashColor();
+        }
+        
+        internal static string GetHashColor(this string s)
+        {
+            int start = 0;
+
+            while(s.Substring(start).Contains("&Color"))
+            {
+                start = s.IndexOf("&Color");
+                end = s.Substring(start).IndexOf(";") + 1;
+                if (end > 9)
+                {
+                    int add = 0
+                    switch(s.Substring(start + 7, 2))
+                    {
+                        case "Lo":
+                            break;
+                        case "Hi":
+                            add = 128;
+                            break;
+                        default:
+                            start++;
+                            continue;
+                    }
+                    string text = s.Substring(start, end);
+                    int hash = Math.Abs(text.GetHashCode());
+                    string color = "#"
+                    for (int i = 0; i < 3; i++)
+                    {
+                        color += (hash % 128 + add).ToString("X");
+                        hash = Math.Abs(hash.ToString().GetHashCode());
+                    }
+                    s = s.Replace(text, "<color=" + color + ">");
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            return s;
         }
     }
 }
