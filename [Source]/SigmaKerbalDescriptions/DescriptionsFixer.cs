@@ -14,7 +14,7 @@ namespace SigmaKerbalDescriptions
         {
             count = 0;
             Debug.Log("DescriptionsFixer", "Start");
-            Description.UpdateAll(HighLogic.CurrentGame.CrewRoster, false);
+            Description.UpdateAll(HighLogic.CurrentGame.CrewRoster);
         }
 
         void Update()
@@ -26,7 +26,7 @@ namespace SigmaKerbalDescriptions
                 if (count == 2)
                 {
                     Debug.Log("DescriptionsFixer", "Update");
-                    Description.UpdateAll(HighLogic.CurrentGame.CrewRoster, fixListItem: false);
+                    Description.UpdateAll(HighLogic.CurrentGame.CrewRoster);
                     DestroyImmediate(this);
                 }
             }
