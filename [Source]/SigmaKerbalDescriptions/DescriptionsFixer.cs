@@ -1,6 +1,7 @@
 using System.Linq;
 using UnityEngine;
 using KSP.UI;
+using KSP.UI.Screens;
 using KSP.UI.TooltipTypes;
 
 
@@ -19,11 +20,11 @@ namespace SigmaKerbalDescriptions
 
         void Update()
         {
-            if (count < 2)
+            if (count < 3)
             {
                 count++;
 
-                if (count == 2)
+                if (count == 3)
                 {
                     Debug.Log("DescriptionsFixer", "Update");
                     Description.UpdateAll(HighLogic.CurrentGame.CrewRoster);
@@ -135,10 +136,35 @@ namespace SigmaKerbalDescriptions
                 if (tooltip != null && !string.IsNullOrEmpty(description))
                 {
                     tooltip.descriptionString = description.PrintFor(kerbal);
+                    if (kerbal.type == ProtoCrewMember.KerbalType.Applicant)
+                        tooltip.descriptionString += CheckForErrors();
 
                     UIMasterController.Instance.DespawnTooltip(tooltip);
                 }
             }
+        }
+
+        private static string CheckForErrors()
+        {
+            AstronautComplex complex = Resources.FindObjectsOfTypeAll<AstronautComplex>().FirstOrDefault();
+            KerbalRoster roster = HighLogic.CurrentGame.CrewRoster;
+            if (complex == null || roster == null) return "";
+
+            int active = roster.GetActiveCrewCount();
+
+            if (active < complex.crewLimit())
+            {
+                if (GameVariables.Instance.GetRecruitHireCost(active) > Funding.Instance.Funds)
+                {
+                    return TooltipErrors.OutOfFunds;
+                }
+            }
+            else
+            {
+                return TooltipErrors.AtCapacity;
+            }
+
+            return "";
         }
     }
 }
