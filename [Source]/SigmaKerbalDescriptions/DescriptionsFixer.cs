@@ -136,6 +136,7 @@ namespace SigmaKerbalDescriptions
                 if (tooltip != null && !string.IsNullOrEmpty(description))
                 {
                     tooltip.descriptionString = description.PrintFor(kerbal);
+
                     if (kerbal.type == ProtoCrewMember.KerbalType.Applicant)
                         tooltip.descriptionString += CheckForErrors();
 
