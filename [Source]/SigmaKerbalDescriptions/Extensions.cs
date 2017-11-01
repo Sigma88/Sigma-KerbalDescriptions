@@ -26,6 +26,20 @@ namespace SigmaKerbalDescriptions
             return h;
         }
 
+        internal static int crewLimit(this AstronautComplex complex)
+        {
+            FieldInfo crewLimit = typeof(AstronautComplex).GetFields(BindingFlags.NonPublic | BindingFlags.Instance).FirstOrDefault(k => k.Name == "crewLimit");
+
+            try
+            {
+                return (int)crewLimit.GetValue(complex);
+            }
+            catch
+            {
+                return int.MaxValue;
+            }
+        }
+
         internal static CrewListItem crewListItem(this ProtoCrewMember kerbal)
         {
             FieldInfo crew = typeof(CrewListItem).GetFields(BindingFlags.NonPublic | BindingFlags.Instance).FirstOrDefault(k => k.FieldType == typeof(ProtoCrewMember));
