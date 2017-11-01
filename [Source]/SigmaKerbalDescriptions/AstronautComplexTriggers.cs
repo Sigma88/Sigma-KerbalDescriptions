@@ -26,7 +26,7 @@ namespace SigmaKerbalDescriptions
         {
             Debug.Log("HIRE_UPDATE");
             Description.Update(newCrew);
-            Description.UpdateAll(HighLogic.CurrentGame.CrewRoster.Applicants.ToArray(), fixListItem: false);
+            Description.UpdateAll(HighLogic.CurrentGame.CrewRoster.Applicants.ToArray());
             Debug.Log("HIRE_UPDATE_FINISH");
             TimingManager.UpdateRemove(TimingManager.TimingStage.Normal, HireApplicant);
         }

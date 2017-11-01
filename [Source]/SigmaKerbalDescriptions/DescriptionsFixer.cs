@@ -1,6 +1,7 @@
 using System.Linq;
 using UnityEngine;
 using KSP.UI;
+using KSP.UI.Screens;
 using KSP.UI.TooltipTypes;
 
 
@@ -14,19 +15,19 @@ namespace SigmaKerbalDescriptions
         {
             count = 0;
             Debug.Log("DescriptionsFixer", "Start");
-            Description.UpdateAll(HighLogic.CurrentGame.CrewRoster, false);
+            Description.UpdateAll(HighLogic.CurrentGame.CrewRoster);
         }
 
         void Update()
         {
-            if (count < 2)
+            if (count < 3)
             {
                 count++;
 
-                if (count == 2)
+                if (count == 3)
                 {
                     Debug.Log("DescriptionsFixer", "Update");
-                    Description.UpdateAll(HighLogic.CurrentGame.CrewRoster, fixListItem: false);
+                    Description.UpdateAll(HighLogic.CurrentGame.CrewRoster);
                     DestroyImmediate(this);
                 }
             }
@@ -35,25 +36,24 @@ namespace SigmaKerbalDescriptions
 
     internal static class Description
     {
-        internal static void UpdateAll(KerbalRoster kerbals, bool fixTooltip = true, bool fixListItem = true)
+        internal static void UpdateAll(KerbalRoster kerbals)
         {
             for (int i = 0; i < kerbals?.Count; i++)
             {
-                Update(kerbals[i], fixTooltip, fixListItem);
+                Update(kerbals[i]);
             }
         }
 
-        internal static void UpdateAll(ProtoCrewMember[] kerbals, bool fixTooltip = true, bool fixListItem = true)
+        internal static void UpdateAll(ProtoCrewMember[] kerbals)
         {
             for (int i = 0; i < kerbals?.Length; i++)
             {
-                Update(kerbals[i], fixTooltip, fixListItem);
+                Update(kerbals[i]);
             }
         }
 
-        internal static void Update(ProtoCrewMember kerbal, bool fixTooltip = true, bool fixListItem = true)
+        internal static void Update(ProtoCrewMember kerbal)
         {
-            if (!fixTooltip && !fixListItem) return;
             Debug.Log("Description.Update", "kerbal = " + kerbal);
             if (kerbal == null) return;
 
@@ -61,9 +61,6 @@ namespace SigmaKerbalDescriptions
             Debug.Log("Description.Update", "item = " + item);
             TooltipController_CrewAC tooltip = item.GetTooltip();
             Debug.Log("Description.Update", "tooltip = " + tooltip);
-
-            if (!fixListItem) item = null;
-            if (!fixTooltip) tooltip = null;
 
             // Missing Kerbal Tooltip
             if (tooltip == null && item == null)
@@ -140,9 +137,35 @@ namespace SigmaKerbalDescriptions
                 {
                     tooltip.descriptionString = description.PrintFor(kerbal);
 
+                    if (kerbal.type == ProtoCrewMember.KerbalType.Applicant)
+                        tooltip.descriptionString += CheckForErrors();
+
                     UIMasterController.Instance.DespawnTooltip(tooltip);
                 }
             }
+        }
+
+        private static string CheckForErrors()
+        {
+            AstronautComplex complex = Resources.FindObjectsOfTypeAll<AstronautComplex>().FirstOrDefault();
+            KerbalRoster roster = HighLogic.CurrentGame.CrewRoster;
+            if (complex == null || roster == null) return "";
+
+            int active = roster.GetActiveCrewCount();
+
+            if (active < complex.crewLimit())
+            {
+                if (GameVariables.Instance.GetRecruitHireCost(active) > Funding.Instance.Funds)
+                {
+                    return TooltipErrors.OutOfFunds;
+                }
+            }
+            else
+            {
+                return TooltipErrors.AtCapacity;
+            }
+
+            return "";
         }
     }
 }
