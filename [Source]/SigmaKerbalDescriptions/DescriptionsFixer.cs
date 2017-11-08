@@ -147,15 +147,15 @@ namespace SigmaKerbalDescriptions
 
         private static string CheckForErrors()
         {
-            AstronautComplex complex = Resources.FindObjectsOfTypeAll<AstronautComplex>().FirstOrDefault();
-            KerbalRoster roster = HighLogic.CurrentGame.CrewRoster;
+            AstronautComplex complex = Resources.FindObjectsOfTypeAll<AstronautComplex>()?.FirstOrDefault();
+            KerbalRoster roster = HighLogic.CurrentGame?.CrewRoster;
             if (complex == null || roster == null) return "";
 
-            int active = roster.GetActiveCrewCount();
+            int? active = roster?.GetActiveCrewCount();
 
-            if (active < complex.crewLimit())
+            if (active < complex?.crewLimit())
             {
-                if (GameVariables.Instance.GetRecruitHireCost(active) > Funding.Instance.Funds)
+                if (GameVariables.Instance?.GetRecruitHireCost((int)active) > Funding.Instance?.Funds)
                 {
                     return TooltipErrors.OutOfFunds;
                 }
