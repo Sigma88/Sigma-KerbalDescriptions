@@ -7,7 +7,7 @@ using UnityEngine;
 namespace SigmaKerbalDescriptions
 {
     [KSPAddon(KSPAddon.Startup.Instantly, true)]
-    internal class UserSettings : MonoBehaviour
+    class UserSettings : MonoBehaviour
     {
         internal static ConfigNode ConfigNode
         {

@@ -8,7 +8,7 @@ using Type = ProtoCrewMember.KerbalType;
 
 namespace SigmaKerbalDescriptions
 {
-    internal class Information
+    class Information
     {
         // Static
         internal static string hash = "";

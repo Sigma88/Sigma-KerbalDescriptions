@@ -7,34 +7,7 @@ using KSP.UI.TooltipTypes;
 
 namespace SigmaKerbalDescriptions
 {
-    class DescriptionsFixer : MonoBehaviour
-    {
-        static int count = 0;
-
-        void Start()
-        {
-            count = 0;
-            Debug.Log("DescriptionsFixer", "Start");
-            Description.UpdateAll(HighLogic.CurrentGame.CrewRoster);
-        }
-
-        void Update()
-        {
-            if (count < 3)
-            {
-                count++;
-
-                if (count == 3)
-                {
-                    Debug.Log("DescriptionsFixer", "Update");
-                    Description.UpdateAll(HighLogic.CurrentGame.CrewRoster);
-                    DestroyImmediate(this);
-                }
-            }
-        }
-    }
-
-    internal static class Description
+    class Description
     {
         internal static void UpdateAll(KerbalRoster kerbals)
         {
@@ -61,8 +34,20 @@ namespace SigmaKerbalDescriptions
             Debug.Log("Description.Update", "item = " + item);
             TooltipController_CrewAC tooltip = item.GetTooltip();
             Debug.Log("Description.Update", "tooltip = " + tooltip);
+            Update(new ListItemContainer(item), tooltip, kerbal);
+        }
 
+        internal static void Update(ListItemContainer item, TooltipController_CrewAC tooltip, ProtoCrewMember kerbal)
+        {
             // Missing Kerbal Tooltip
+            if (kerbal == null)
+            {
+                Debug.Log("Description.Update", "Kerbal not found.");
+                return;
+            }
+
+            else
+
             if (tooltip == null && item == null)
             {
                 Debug.Log("Description.Update", "Couldn't find CrewListItem and Tooltip for Kerbal \"" + kerbal.name + "\".");
@@ -121,13 +106,13 @@ namespace SigmaKerbalDescriptions
 
                         if (item != null && !itemNameChanged && !string.IsNullOrEmpty(Information.newItemName))
                         {
-                            item.kerbalName.text = Information.newItemName.PrintFor(kerbal);
+                            item.name = Information.newItemName.PrintFor(kerbal);
                             itemNameChanged = true;
                         }
 
                         if (item != null && !spriteChanged && Information.newSprite != null)
                         {
-                            item.kerbalSprite.texture = Information.newSprite;
+                            item.sprite = Information.newSprite;
                             spriteChanged = true;
                         }
                     }
