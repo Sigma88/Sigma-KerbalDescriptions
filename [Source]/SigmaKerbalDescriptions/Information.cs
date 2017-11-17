@@ -8,7 +8,19 @@ using Type = ProtoCrewMember.KerbalType;
 
 namespace SigmaKerbalDescriptions
 {
-    internal class Information
+    public enum Status
+    {
+        Crew = 0,
+        Applicant = 1,
+        Unowned = 2,
+        Tourist = 3,
+        Available = 4,
+        Assigned = 5,
+        Dead = 6,
+        Missing = 7
+    }
+
+    class Information
     {
         // Static
         internal static string hash = "";
@@ -27,7 +39,7 @@ namespace SigmaKerbalDescriptions
         internal bool unique = false;
         internal bool last = false;
         internal float useChance = 1;
-        Type? rosterStatus = null;
+        Status? status = null;
         Gender? gender = null;
         string[] trait = null;
         bool? veteran = null;
@@ -56,40 +68,46 @@ namespace SigmaKerbalDescriptions
             if (name == null || name == kerbal.name)
             {
                 Debug.Log("Information.GetText", "Matched name = " + name + " to kerbal name = " + kerbal.name);
-                if (rosterStatus == null || rosterStatus == kerbal.type)
+                if (status == null || (Type)status == kerbal.type || (int?)status > 3 && kerbal.type == 0)
                 {
-                    Debug.Log("Information.GetText", "Matched rosterStatus = " + rosterStatus + " to kerbal rosterStatus = " + kerbal.type);
-                    if (gender == null || gender == kerbal.gender)
+                    Debug.Log("Information.GetText", "Matched status = " + status + " to kerbal type = " + kerbal.type);
+                    if (!((int?)status > 3 && kerbal.type == 0 && (int?)status - 4 != (int)kerbal.rosterStatus))
                     {
-                        Debug.Log("Information.GetText", "Matched gender = " + gender + " to kerbal gender = " + kerbal.gender);
-                        if (trait == null || trait.Contains(kerbal.trait))
+                        if ((int?)status > 3)
+                            Debug.Log("Information.GetText", "Matched status = " + status + " to kerbal rosterStatus = " + kerbal.rosterStatus);
+
+                        if (gender == null || gender == kerbal.gender)
                         {
-                            Debug.Log("Information.GetText", "Matched trait = " + trait + " to kerbal trait = " + kerbal.trait);
-                            if (veteran == null || veteran == kerbal.veteran)
+                            Debug.Log("Information.GetText", "Matched gender = " + gender + " to kerbal gender = " + kerbal.gender);
+                            if (trait == null || trait.Contains(kerbal.trait))
                             {
-                                Debug.Log("Information.GetText", "Matched veteran = " + veteran + " to kerbal veteran = " + kerbal.veteran);
-                                if (isBadass == null || isBadass == kerbal.isBadass)
+                                Debug.Log("Information.GetText", "Matched trait = " + trait + " to kerbal trait = " + kerbal.trait);
+                                if (veteran == null || veteran == kerbal.veteran)
                                 {
-                                    Debug.Log("Information.GetText", "Matched isBadass = " + isBadass + " to kerbal isBadass = " + kerbal.isBadass);
-                                    if (minLevel <= kerbal.experienceLevel && maxLevel >= kerbal.experienceLevel)
+                                    Debug.Log("Information.GetText", "Matched veteran = " + veteran + " to kerbal veteran = " + kerbal.veteran);
+                                    if (isBadass == null || isBadass == kerbal.isBadass)
                                     {
-                                        Debug.Log("Information.GetText", "Matched minLevel = " + minLevel + ", maxLevel = " + maxLevel + " to kerbal level = " + kerbal.experienceLevel);
-                                        if (minCourage <= kerbal.courage && maxCourage >= kerbal.courage)
+                                        Debug.Log("Information.GetText", "Matched isBadass = " + isBadass + " to kerbal isBadass = " + kerbal.isBadass);
+                                        if (minLevel <= kerbal.experienceLevel && maxLevel >= kerbal.experienceLevel)
                                         {
-                                            Debug.Log("Information.GetText", "Matched minCourage = " + minCourage + ", maxCourage = " + maxCourage + " to kerbal courage = " + kerbal.courage);
-                                            if (minStupidity <= kerbal.stupidity && maxStupidity >= kerbal.stupidity)
+                                            Debug.Log("Information.GetText", "Matched minLevel = " + minLevel + ", maxLevel = " + maxLevel + " to kerbal level = " + kerbal.experienceLevel);
+                                            if (minCourage <= kerbal.courage && maxCourage >= kerbal.courage)
                                             {
-                                                Debug.Log("Information.GetText", "Matched minStupidity = " + minStupidity + ", maxStupidity = " + maxStupidity + " to kerbal stupidity = " + kerbal.stupidity);
+                                                Debug.Log("Information.GetText", "Matched minCourage = " + minCourage + ", maxCourage = " + maxCourage + " to kerbal courage = " + kerbal.courage);
+                                                if (minStupidity <= kerbal.stupidity && maxStupidity >= kerbal.stupidity)
+                                                {
+                                                    Debug.Log("Information.GetText", "Matched minStupidity = " + minStupidity + ", maxStupidity = " + maxStupidity + " to kerbal stupidity = " + kerbal.stupidity);
 
-                                                newItemName = displayName;
-                                                Debug.Log("Information.GetText", "newItemName = " + newItemName);
-                                                newTooltipName = tooltipName;
-                                                Debug.Log("Information.GetText", "newTooltipName = " + newTooltipName);
-                                                newSprite = sprite;
-                                                Debug.Log("Information.GetText", "newSprite = " + newSprite);
+                                                    newItemName = displayName;
+                                                    Debug.Log("Information.GetText", "newItemName = " + newItemName);
+                                                    newTooltipName = tooltipName;
+                                                    Debug.Log("Information.GetText", "newTooltipName = " + newTooltipName);
+                                                    newSprite = sprite;
+                                                    Debug.Log("Information.GetText", "newSprite = " + newSprite);
 
-                                                Debug.Log("Information.GetText", "informations count = " + informations.Length);
-                                                return informations;
+                                                    Debug.Log("Information.GetText", "informations count = " + informations.Length);
+                                                    return informations;
+                                                }
                                             }
                                         }
                                     }
@@ -112,7 +130,7 @@ namespace SigmaKerbalDescriptions
             useChance = Parse(requirements.GetValue("useChance"), useChance);
             index = Parse(requirements.GetValue("index"), index);
             name = requirements.GetValue("name");
-            rosterStatus = Parse(requirements.GetValue("rosterStatus"), rosterStatus);
+            status = Parse(requirements.GetValue("status"), status);
             gender = Parse(requirements.GetValue("gender"), gender);
             trait = requirements.HasValue("trait") ? requirements.GetValues("trait") : null;
             veteran = Parse(requirements.GetValue("veteran"), veteran);
@@ -131,6 +149,8 @@ namespace SigmaKerbalDescriptions
         }
 
 
+        // Parsers
+
         float Parse(string s, float defaultValue) { return float.TryParse(s, out float f) ? f : defaultValue; }
         float? Parse(string s, float? defaultValue) { return float.TryParse(s, out float f) ? f : defaultValue; }
         bool Parse(string s, bool defaultValue) { return bool.TryParse(s, out bool b) ? b : defaultValue; }
@@ -138,15 +158,15 @@ namespace SigmaKerbalDescriptions
         int Parse(string s, int defaultValue) { return int.TryParse(s, out int b) ? b : defaultValue; }
         int? Parse(string s, int? defaultValue) { return int.TryParse(s, out int b) ? b : defaultValue; }
 
-        Type? Parse(string s, Type? defaultValue)
-        {
-            try { return (Type)Enum.Parse(typeof(Type), s); }
-            catch { return defaultValue; }
-        }
-
         Gender? Parse(string s, Gender? defaultValue)
         {
             try { return (Gender)Enum.Parse(typeof(Gender), s); }
+            catch { return defaultValue; }
+        }
+
+        internal static Status? Parse(string s, Status? defaultValue)
+        {
+            try { return (Status)Enum.Parse(typeof(Status), s); }
             catch { return defaultValue; }
         }
 

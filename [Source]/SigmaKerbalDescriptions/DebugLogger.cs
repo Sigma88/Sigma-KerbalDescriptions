@@ -3,7 +3,7 @@
 
 namespace SigmaKerbalDescriptions
 {
-    internal static class Debug
+    class Debug
     {
         internal static bool debug = false;
         internal static string Tag = "[SigmaLog KD]";
