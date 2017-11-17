@@ -68,45 +68,46 @@ namespace SigmaKerbalDescriptions
             if (name == null || name == kerbal.name)
             {
                 Debug.Log("Information.GetText", "Matched name = " + name + " to kerbal name = " + kerbal.name);
-            if (status == null || (Type)status == kerbal.type || (int?)status > 3 && kerbal.type == 0)
-            {
-                Debug.Log("Information.GetText", "Matched status = " + status + " to kerbal type = " + kerbal.type);
-                if (!((int?)status > 3 && kerbal.type == 0 && (int?)status - 4 != (int)kerbal.rosterStatus))
+                if (status == null || (Type)status == kerbal.type || (int?)status > 3 && kerbal.type == 0)
                 {
-                    if ((int?)status > 3)
-                        Debug.Log("Information.GetText", "Matched status = " + status + " to kerbal rosterStatus = " + kerbal.rosterStatus);
-
-                    if (gender == null || gender == kerbal.gender)
+                    Debug.Log("Information.GetText", "Matched status = " + status + " to kerbal type = " + kerbal.type);
+                    if (!((int?)status > 3 && kerbal.type == 0 && (int?)status - 4 != (int)kerbal.rosterStatus))
                     {
-                        Debug.Log("Information.GetText", "Matched gender = " + gender + " to kerbal gender = " + kerbal.gender);
-                        if (trait == null || trait.Contains(kerbal.trait))
+                        if ((int?)status > 3)
+                            Debug.Log("Information.GetText", "Matched status = " + status + " to kerbal rosterStatus = " + kerbal.rosterStatus);
+
+                        if (gender == null || gender == kerbal.gender)
                         {
-                            Debug.Log("Information.GetText", "Matched trait = " + trait + " to kerbal trait = " + kerbal.trait);
-                            if (veteran == null || veteran == kerbal.veteran)
+                            Debug.Log("Information.GetText", "Matched gender = " + gender + " to kerbal gender = " + kerbal.gender);
+                            if (trait == null || trait.Contains(kerbal.trait))
                             {
-                                Debug.Log("Information.GetText", "Matched veteran = " + veteran + " to kerbal veteran = " + kerbal.veteran);
-                                if (isBadass == null || isBadass == kerbal.isBadass)
+                                Debug.Log("Information.GetText", "Matched trait = " + trait + " to kerbal trait = " + kerbal.trait);
+                                if (veteran == null || veteran == kerbal.veteran)
                                 {
-                                    Debug.Log("Information.GetText", "Matched isBadass = " + isBadass + " to kerbal isBadass = " + kerbal.isBadass);
-                                    if (minLevel <= kerbal.experienceLevel && maxLevel >= kerbal.experienceLevel)
+                                    Debug.Log("Information.GetText", "Matched veteran = " + veteran + " to kerbal veteran = " + kerbal.veteran);
+                                    if (isBadass == null || isBadass == kerbal.isBadass)
                                     {
-                                        Debug.Log("Information.GetText", "Matched minLevel = " + minLevel + ", maxLevel = " + maxLevel + " to kerbal level = " + kerbal.experienceLevel);
-                                        if (minCourage <= kerbal.courage && maxCourage >= kerbal.courage)
+                                        Debug.Log("Information.GetText", "Matched isBadass = " + isBadass + " to kerbal isBadass = " + kerbal.isBadass);
+                                        if (minLevel <= kerbal.experienceLevel && maxLevel >= kerbal.experienceLevel)
                                         {
-                                            Debug.Log("Information.GetText", "Matched minCourage = " + minCourage + ", maxCourage = " + maxCourage + " to kerbal courage = " + kerbal.courage);
-                                            if (minStupidity <= kerbal.stupidity && maxStupidity >= kerbal.stupidity)
+                                            Debug.Log("Information.GetText", "Matched minLevel = " + minLevel + ", maxLevel = " + maxLevel + " to kerbal level = " + kerbal.experienceLevel);
+                                            if (minCourage <= kerbal.courage && maxCourage >= kerbal.courage)
                                             {
-                                                Debug.Log("Information.GetText", "Matched minStupidity = " + minStupidity + ", maxStupidity = " + maxStupidity + " to kerbal stupidity = " + kerbal.stupidity);
+                                                Debug.Log("Information.GetText", "Matched minCourage = " + minCourage + ", maxCourage = " + maxCourage + " to kerbal courage = " + kerbal.courage);
+                                                if (minStupidity <= kerbal.stupidity && maxStupidity >= kerbal.stupidity)
+                                                {
+                                                    Debug.Log("Information.GetText", "Matched minStupidity = " + minStupidity + ", maxStupidity = " + maxStupidity + " to kerbal stupidity = " + kerbal.stupidity);
 
-                                                newItemName = displayName;
-                                                Debug.Log("Information.GetText", "newItemName = " + newItemName);
-                                                newTooltipName = tooltipName;
-                                                Debug.Log("Information.GetText", "newTooltipName = " + newTooltipName);
-                                                newSprite = sprite;
-                                                Debug.Log("Information.GetText", "newSprite = " + newSprite);
+                                                    newItemName = displayName;
+                                                    Debug.Log("Information.GetText", "newItemName = " + newItemName);
+                                                    newTooltipName = tooltipName;
+                                                    Debug.Log("Information.GetText", "newTooltipName = " + newTooltipName);
+                                                    newSprite = sprite;
+                                                    Debug.Log("Information.GetText", "newSprite = " + newSprite);
 
-                                                Debug.Log("Information.GetText", "informations count = " + informations.Length);
-                                                return informations;
+                                                    Debug.Log("Information.GetText", "informations count = " + informations.Length);
+                                                    return informations;
+                                                }
                                             }
                                         }
                                     }
@@ -115,7 +116,6 @@ namespace SigmaKerbalDescriptions
                         }
                     }
                 }
-            }
             }
 
             return new string[] { };
